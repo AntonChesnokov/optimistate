@@ -1,0 +1,66 @@
+{
+  "name": "optimistate",
+  "version": "1.0.1",
+  "description": "Framework-agnostic optimistic update + rollback utilities with first-class TypeScript support.",
+  "author": "Anton Chesnokov <chesnokov.tony@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/AntonChesnokov/optimistate#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AntonChesnokov/optimistate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AntonChesnokov/optimistate/issues"
+  },
+  "keywords": [
+    "optimistic-updates",
+    "optimistic-ui",
+    "rollback",
+    "state-management",
+    "typescript",
+    "framework-agnostic",
+    "angular",
+    "signals",
+    "angular-signals",
+    "ui-updates"
+  ],
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/public-api.js",
+  "module": "./dist/public-api.js",
+  "types": "./dist/public-api.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/public-api.d.ts",
+      "import": "./dist/public-api.js",
+      "default": "./dist/public-api.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "clean": "node --input-type=commonjs -e \"require('fs').rmSync('dist',{recursive:true,force:true});\"",
+    "build": "npm run clean && tsc -p tsconfig.lib.prod.json && node scripts/prepare-dist.cjs",
+    "watch": "tsc -p tsconfig.lib.json --watch",
+    "test": "vitest run",
+    "lint": "eslint src/**/*.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.lib.json"
+  },
+  "peerDependencies": {},
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.1",
+    "jsdom": "^27.1.0",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "8.47.0",
+    "vitest": "^4.0.8"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "npm@11.6.2"
+}

@@ -1,0 +1,99 @@
+<main class="shell">
+  <header class="app-header">
+    <div class="header-content">
+      <h1>optimistate · Angular 21</h1>
+      <p class="subtitle">Optimistic UI updates with automatic rollback</p>
+    </div>
+  </header>
+
+  <section class="panel">
+    <header class="heading">
+      <p class="eyebrow">Angular Signals + status/error</p>
+      <h2>Advanced counter demo</h2>
+      <p class="lede">
+        Same core API, but wiring Angular signals directly for status/error and running a slower
+        operation with a 30% failure chance.
+      </p>
+    </header>
+
+    <div class="counter">
+      <div class="value">{{ signalCounter() }}</div>
+      <div class="status">
+        <span
+          class="pill"
+          [class.pending]="signalStatus() === 'pending'"
+          [class.error]="signalStatus() === 'error'">
+          Status: {{ signalStatus() }}
+        </span>
+        <button type="button" (click)="resetSignal()" class="ghost">Reset</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" (click)="bumpSignal(-1)" [disabled]="signalStatus() === 'pending'">
+        -1
+      </button>
+      <button type="button" (click)="bumpSignal(1)" [disabled]="signalStatus() === 'pending'">
+        +1
+      </button>
+      <button type="button" (click)="bumpSignal(5)" [disabled]="signalStatus() === 'pending'">
+        +5
+      </button>
+    </div>
+
+    @if (signalStatus() === 'error' && signalError(); as err) {
+      <p class="error">Rolled back: {{ errorMessage(err) }}</p>
+    }
+
+    <p class="note">
+      Uses Angular writable signals as `WritableRef` targets for status/error, no adapters needed.
+    </p>
+  </section>
+
+  <section class="panel">
+    <header class="heading">
+      <p class="eyebrow">Custom rollback</p>
+      <h2>Manual rollback demo</h2>
+      <p class="lede">
+        No status/error passed in; the action creates them internally. Rollback applies custom logic
+        instead of reverting to the snapshot.
+      </p>
+    </header>
+
+    <div class="counter">
+      <div class="value">{{ customCounter() }}</div>
+      <div class="status">
+        <span
+          class="pill"
+          [class.pending]="readTarget(customAction.status) === 'pending'"
+          [class.error]="readTarget(customAction.status) === 'error'">
+          Status: {{ readTarget(customAction.status) ?? 'idle' }}
+        </span>
+        <button type="button" (click)="resetCustom()" class="ghost">Reset</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" (click)="bumpCustom(-1)" [disabled]="readTarget(customAction.status) === 'pending'">
+        -1
+      </button>
+      <button type="button" (click)="bumpCustom(1)" [disabled]="readTarget(customAction.status) === 'pending'">
+        +1
+      </button>
+      <button type="button" (click)="bumpCustom(5)" [disabled]="readTarget(customAction.status) === 'pending'">
+        +5
+      </button>
+    </div>
+
+    @if (readTarget(customAction.status) === 'error') {
+      <p class="error">
+        Rolled back custom: {{ customMessage() ?? errorMessage(readTarget(customAction.error)) }}
+      </p>
+    }
+
+    <p class="note">
+      Custom rollback handler sets the counter to <code>previous - 1</code> and records a message.
+      Status/error are auto-created and accessible via <code>action.status</code> / <code>action.error</code>.
+    </p>
+  </section>
+</main>
